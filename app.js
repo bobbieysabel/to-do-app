@@ -8,38 +8,63 @@ function onReady(){
         
         //create list item
         let newLi = document.createElement('li');  
+        newLi.classList.add('mdl-list__item');
+
+        //create primary span container
+        let toDoContainer = document.createElement('span');
+        toDoContainer.classList.add('mdl-list__item-primary-content');
         
-        //create and attach new checkpot input to list item
+        //create and attach new checkbox input to primary span container
+        let toDoLabel = document.createElement('label');
+        toDoLabel.classList.add('mdl-checkbox', 'mdl-js-checkbox', 'mdl-js-ripple-effect');
+        //toDoLabel.htmlFor = 'list-checkbox-1';
         let checkbox = document.createElement('input');
-        checkbox.type = "checkbox"; 
-        newLi.appendChild(checkbox);       
+        checkbox.type = 'checkbox'; 
+        //checkbox.id = 'list-checkbox-1';
+        checkbox.className = 'mdl-checkbox__input';
+        toDoLabel.appendChild(checkbox);
+        toDoContainer.appendChild(toDoLabel);    
         
         //retrieve text input and attach to list item
         let title = document.createTextNode(newToDoText.value);
-        newLi.appendChild(title);
+        toDoContainer.appendChild(title);
 
-        //create and attach delete button to list item
-        let btn = document.createElement('button');
-        let text = document.createTextNode('Delete');
-        btn.className = 'close';
-        btn.appendChild(text);
-        newLi.appendChild(btn);        
+        let icon = document.createElement('i');
+        let text = document.createTextNode('delete');
+        icon.classList.add('material-icons', 'close');
+        icon.appendChild(text);
+        icon.addEventListener('click', function(e) {
+            toDoList.removeChild(icon.parentNode.parentNode);
+        });
 
+        toDoContainer.appendChild(icon);
+
+        //append span container to list item
+        newLi.appendChild(toDoContainer);
+/*
+        //create secondary span container
+        let deleteToDo = document.createElement('span');
+        deleteToDo.classList.add('mdl-list__item-secondary-action');
+        deleteToDo.addEventListener('click', function(e) {
+            toDoList.removeChild(deleteToDo.parentNode);
+        });
+        
+
+        //create and attach delete button to secondary span container
+        let icon = document.createElement('i');
+        let text = document.createTextNode('delete');
+        icon.classList.add('material-icons', 'close');
+        icon.appendChild(text);
+        deleteToDo.appendChild(icon);    
+        
+        //append secondary span container to list item
+        newLi.appendChild(deleteToDo);
+*/
         //add list item to to-do list
         toDoList.appendChild(newLi);
 
         //empty form input
-        newToDoText.value = "";
-        
-        //deletes list items when delete button is clicked
-        let close = document.getElementsByClassName("close");
-        for (let i = 0; i < close.length; i++) {
-          close[i].onclick = function() {
-            parent = document.getElementById("toDoList")
-            child = this.parentNode;
-            parent.removeChild(child);
-          }
-        }
+        newToDoText.value = '';
     });
 }
 
