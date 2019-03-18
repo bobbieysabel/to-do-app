@@ -17,10 +17,8 @@ function onReady(){
         //create checkbox and attach to primary span container
         let toDoLabel = document.createElement('label');
         toDoLabel.classList.add('mdl-checkbox', 'mdl-js-checkbox', 'mdl-js-ripple-effect');
-        toDoLabel.htmlFor = 'list-checkbox-1';
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.id = 'list-checkbox-1';
         checkbox.classList.add('mdl-checkbox__input');
         toDoLabel.appendChild(checkbox);
         toDoContainer.appendChild(toDoLabel);
@@ -57,6 +55,8 @@ function onReady(){
 
         //empty form input
         newToDoText.value = '';
+
+        componentHandler.upgradeDom();
     });
 }
 
