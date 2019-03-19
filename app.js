@@ -11,7 +11,7 @@ function onReady(){
     }
     renderTheUI();
 
-    //creates new to do item and adds item to array
+    //creates new to-do item and adds item to array
     function createNewToDo() {
         const newToDoText = document.getElementById('newToDoText');
 
@@ -37,45 +37,71 @@ function onReady(){
         toDoList.textContent = '';
 
         toDos.forEach(function(toDo) {
+            //create list item
             const newLi = document.createElement('li');
+            newLi.className = 'mdl-list__item';
 
-            //creates checkbox input and adds click event
+            //create primary span container
+            const toDoContainer = document.createElement('span');
+            toDoContainer.className = 'mdl-list__item-primary-content';
+
+            //creates checkbox input and adds to primary span container
+            const toDoLabel = document.createElement('label');
+            toDoLabel.className = 'mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect';
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
+            checkbox.className = 'mdl-checkbox__input';
             checkbox.addEventListener('click', event => {
                if (checkbox.checked) {
                    toDo.complete = true;
-                   alert(toDo.complete);
                }
                else {
                    toDo.complete = false;
-                   alert(toDo.complete);
                }
-            })
+            });
+            toDoLabel.appendChild(checkbox);
+            toDoContainer.appendChild(toDoLabel);
+
+            //creates to-do item text and appends to primary span container
+            let labelText = document.createTextNode(toDo.title);
+            toDoContainer.appendChild(labelText);
+
+            //create secondary span container
+            const deleteContainer = document.createElement('span');
+            deleteContainer.className = 'mdl-list__item-secondary-action';
             
-            //creates delete button and adds click event
+            //creates delete button and appends to secondary span container
             const deleteButton = document.createElement('button');
-            const deleteText = document.createTextNode('Delete');
-            deleteButton.appendChild(deleteText);
-            deleteButton.addEventListener('click', event => {
+            deleteButton.className = 'mdl-button mdl-js-button mdl-button--icon';
+            
+            //const deleteText = document.createTextNode('Delete');
+            const icon = document.createElement('i');
+            const deleteText = document.createTextNode('delete');
+            icon.className = 'material-icons';
+            icon.appendChild(deleteText);
+            deleteButton.appendChild(icon);
+            deleteContainer.appendChild(deleteButton);
+            deleteContainer.addEventListener('click', event => {
+                event.preventDefault();
                 toDos = toDos.filter(function(item){
                     return item.id !== toDo.id;
-                })
+                });
 
                 saveData();
                 renderTheUI();
             });
 
-            newLi.textContent = toDo.title;
-
+            //putting it all together
             toDoList.appendChild(newLi);
-            newLi.appendChild(checkbox);
+            newLi.appendChild(toDoContainer);
+            newLi.appendChild(deleteContainer);
 
-            newLi.appendChild(deleteButton);
+            //upgrades MDL components
+            componentHandler.upgradeDom();
         });
     }
 
-    //creates new to do when form is submitted
+    //creates new to-do when form is submitted
     addToDoForm.addEventListener('submit', event => {
         event.preventDefault();
         createNewToDo();
