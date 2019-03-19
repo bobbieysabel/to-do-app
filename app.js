@@ -2,6 +2,14 @@ function onReady(){
     const addToDoForm = document.getElementById('addToDoForm');
     let toDos = [];
     let id = 0;
+    let toDoString = '';
+
+    //checks for to-do list from local storage
+    toDoString = localStorage.getItem('toDos');
+    if (toDoString !== null) {
+        toDos = JSON.parse(toDoString);
+    }
+    renderTheUI();
 
     //creates new to do item and adds item to array
     function createNewToDo() {
@@ -18,7 +26,7 @@ function onReady(){
         id++;
 
         newToDoText.value = '';
-
+        saveData();
         renderTheUI();
     }
 
@@ -30,8 +38,20 @@ function onReady(){
 
         toDos.forEach(function(toDo) {
             const newLi = document.createElement('li');
+
+            //creates checkbox input and adds click event
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
+            checkbox.addEventListener('click', event => {
+               if (checkbox.checked) {
+                   toDo.complete = true;
+                   alert(toDo.complete);
+               }
+               else {
+                   toDo.complete = false;
+                   alert(toDo.complete);
+               }
+            })
             
             //creates delete button and adds click event
             const deleteButton = document.createElement('button');
@@ -42,6 +62,7 @@ function onReady(){
                     return item.id !== toDo.id;
                 })
 
+                saveData();
                 renderTheUI();
             });
 
@@ -58,9 +79,14 @@ function onReady(){
     addToDoForm.addEventListener('submit', event => {
         event.preventDefault();
         createNewToDo();
-
         renderTheUI();
     });
+
+    //saves to-do list data
+    function saveData(){
+        toDoString = JSON.stringify(toDos);
+        localStorage.setItem('toDos', toDoString);
+    }
 
 }
 
